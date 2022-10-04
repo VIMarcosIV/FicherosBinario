@@ -1,5 +1,6 @@
-import java.io.File;
-import java.io.ObjectOutputStream;
+import org.iesch.ad.modelo.Empleado;
+
+import java.io.*;
 import java.util.Stack;
 
 public class FicheroBinario {
@@ -14,5 +15,49 @@ public class FicheroBinario {
         Stack<Empleado> pila = new Stack<>();
         pila.add(e1);
         pila.add(e2);
+
+        try {
+            fichero = new File("empleados");
+            f = new ObjectOutputStream(new FileOutputStream(fichero));
+            System.out.println("Escribiendo objetos en binario en: " + fichero.getAbsolutePath());
+            f.writeObject(e1);
+            f.writeObject(e2);
+            f.writeObject(pila);
+            System.out.println("Todo escrito");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (f != null) {
+                try {
+                    f.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    public static void testLeerFicheroBinario() {
+        ObjectInputStream f = null;
+        File fichero = null;
+
+        try {
+            fichero = new File("empleados");
+            f = new ObjectInputStream(new FileInputStream(fichero));
+            System.out.println("Leyendo datos...");
+            Empleado e1 = (Empleado) f.readObject();
+            Empleado e2 = (Empleado) f.readObject();
+            Stack<Empleado> pila = (Stack<Empleado>) f.readObject();
+            System.out.println(pila.pop().toString());
+            System.out.println(pila.pop().toString());
+            System.out.println(pila.empty());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
