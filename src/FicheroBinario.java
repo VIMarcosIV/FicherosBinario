@@ -1,5 +1,3 @@
-import org.iesch.ad.modelo.Empleado;
-
 import java.io.File;
 import java.io.ObjectOutputStream;
 import java.util.Stack;
